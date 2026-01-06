@@ -4,72 +4,71 @@
 <meta charset="UTF-8">
 <title>Radio Krakatau FM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-    body{
-        margin:0;
-        font-family: Arial, Helvetica, sans-serif;
-        background:#0f172a;
-        color:white;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        height:100vh;
-    }
-    .radio-box{
-        background:#020617;
-        padding:25px;
-        border-radius:18px;
-        text-align:center;
-        width:320px;
-        box-shadow:0 10px 30px rgba(0,0,0,.6);
-    }
-    h1{
-        font-size:22px;
-        margin-bottom:5px;
-    }
-    p{
-        font-size:14px;
-        color:#94a3b8;
-        margin-bottom:20px;
-    }
-    button{
-        background:#22c55e;
-        border:none;
-        padding:14px 25px;
-        font-size:16px;
-        border-radius:50px;
-        cursor:pointer;
-        color:#022c22;
-        font-weight:bold;
-    }
-    button.pause{
-        background:#ef4444;
-        color:white;
-    }
-    footer{
-        margin-top:15px;
-        font-size:12px;
-        color:#64748b;
-    }
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(160deg,#020617,#020617,#020617);
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.radio-box{
+    background:#020617;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    width:320px;
+    box-shadow:0 20px 40px rgba(0,0,0,.7);
+}
+h1{
+    font-size:22px;
+    margin-bottom:6px;
+}
+p{
+    font-size:14px;
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+button{
+    background:#22c55e;
+    border:none;
+    padding:15px 28px;
+    font-size:16px;
+    border-radius:50px;
+    cursor:pointer;
+    color:#022c22;
+    font-weight:bold;
+}
+button.pause{
+    background:#ef4444;
+    color:white;
+}
+footer{
+    margin-top:18px;
+    font-size:12px;
+    color:#64748b;
+}
 </style>
 </head>
+
 <body>
 
 <div class="radio-box">
     <h1>📻 Radio Krakatau FM</h1>
     <p>Live Streaming</p>
 
-    <audio id="radio" preload="none">
-        <!-- STREAMING URL -->
+    <!-- AUDIO FIX ANDROID -->
+    <audio id="radio" playsinline muted preload="none">
         <source src="https://streaming.radio.co/s5c5da6cc7/listen" type="audio/mpeg">
-        Browser tidak mendukung audio.
     </audio>
 
     <button id="btn" onclick="toggleRadio()">▶ Play</button>
 
-    <footer>
-        © Radio Krakatau
-    </footer>
+    <footer>© Radio Krakatau</footer>
 </div>
 
 <script>
@@ -78,9 +77,14 @@ const btn = document.getElementById("btn");
 
 function toggleRadio(){
     if(radio.paused){
-        radio.play();
-        btn.textContent = "⏸ Pause";
-        btn.classList.add("pause");
+        radio.muted = false; // buka mute WAJIB setelah klik
+        radio.play().then(()=>{
+            btn.textContent = "⏸ Pause";
+            btn.classList.add("pause");
+        }).catch(err=>{
+            alert("Audio diblokir browser.\nRefresh lalu klik Play.");
+            console.log(err);
+        });
     }else{
         radio.pause();
         btn.textContent = "▶ Play";
