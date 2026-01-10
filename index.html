@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kius Menyambut Usia Balig - 100 Soal</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --secondary: #50E3C2;
+            --accent: #FF6B6B;
+            --background: #F4F7F6;
+            --card-bg: #FFFFFF;
+            --text: #333333;
+            --text-light: #777777;
+            --success: #2ECC71;
+            --error: #E74C3C;
+            --radius: 12px;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .subtitle { font-size: 0.9rem; opacity: 0.9; }
+
+        .progress-container { width: 100%; height: 6px; background: #eee; }
+        .progress-bar { height: 100%; background: var(--secondary); width: 0%; transition: width 0.3s ease; }
+
+        .screen {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .hidden { display: none !important; }
+
+        .illustration { font-size: 4rem; margin-bottom: 20px; color: var(--primary); }
+
+        .btn {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 30px; font-size: 1.1rem; border-radius: 50px;
+            cursor: pointer; transition: transform 0.2s, background 0.2s;
+            margin-top: 20px; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn:hover { transform: translateY(-2px); background: #357ABD; }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-secondary:hover { background: #f0f7ff; }
+
+        .quiz-header {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light); font-weight: bold;
+        }
+
+        .audio-control {
+            background: none; border: none; cursor: pointer; color: var(--primary);
+            font-size: 1.2rem; padding: 5px; border-radius: 50%; transition: background 0.2s;
+        }
+        .audio-control:hover { background: #eef; }
+
+        .question-text {
+            font-size: 1.2rem; font-weight: 600; margin-bottom: 30px; line-height: 1.5;
+            width: 100%; text-align: left;
+        }
+
+        .options-grid { width: 100%; display: grid; gap: 12px; }
+
+        .option-btn {
+            background: white; border: 2px solid #e0e0e0; padding: 15px;
+            border-radius: 8px; text-align: left; font-size: 1rem;
+            cursor: pointer; transition: all 0.2s; position: relative;
+        }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #f9fcff; }
+        .option-btn.correct { border-color: var(--success); background: #eaffea; color: #0c5c0c; }
+        .option-btn.wrong { border-color: var(--error); background: #ffeaea; color: #5c0c0c; }
+        .option-btn:disabled { cursor: default; opacity: 0.8; }
+
+        .feedback-area {
+            margin-top: 20px; padding: 15px; border-radius: 8px; width: 100%;
+            text-align: left; display: none; animation: fadeIn 0.3s ease;
+        }
+        .feedback-area.correct { background: #eaffea; border: 1px solid var(--success); color: #0c5c0c; }
+        .feedback-area.wrong { background: #ffeaea; border: 1px solid var(--error); color: #5c0c0c; }
+
+        .next-btn-container { margin-top: 20px; width: 100%; display: flex; justify-content: flex-end; }
+
+        .score-circle {
+            width: 150px; height: 150px; border-radius: 50%; background: var(--primary);
+            color: white; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin: 20px 0; box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
+        }
+        .score-number { font-size: 3rem; font-weight: bold; }
+        .score-label { font-size: 0.9rem; }
+        .result-message { font-size: 1.2rem; margin-bottom: 30px; color: var(--text); }
+
+        footer { padding: 10px; text-align: center; font-size: 0.8rem; color: var(--text-light); background: #fafafa; border-top: 1px solid #eee; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .icon { width: 24px; height: 24px; fill: currentColor; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1>Kius Usia Balig</h1>
+            <div class="subtitle">Materi: Pubertas, Kesehatan & Moral</div>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <div class="illustration">🌱</div>
+            <h2>100 Soal Pengetahuan</h2>
+            <p style="margin: 15px 0; color: #666; line-height: 1.6;">
+                Uji pemahamanmu tentang menyambut usia balig.<br>
+                Dilengkapi sistem suara baca.
+            </p>
+            
+            <div style="margin: 20px 0; background: #eef; padding: 15px; border-radius: 8px; width: 100%;">
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="audio-toggle" checked>
+                    <span>Aktifkan Suara Baca</span>
+                </label>
+            </div>
+
+            <button class="btn" onclick="startQuiz()">
+                Mulai Kuis
+                <svg class="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen hidden" style="justify-content: flex-start; padding-top: 20px;">
+            <div class="quiz-header">
+                <span id="question-counter">Soal 1 / 100</span>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <span id="current-score-display">Skor: 0</span>
+                    <button class="audio-control" id="replay-audio-btn" title="Putar Ulang Suara" onclick="replayAudio()">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-text" id="question-text">
+                Memuat soal...
+            </div>
+
+            <div class="options-grid" id="options-container">
+                <!-- Options will be injected here -->
+            </div>
+
+            <div id="feedback" class="feedback-area">
+                <strong id="feedback-title">Benar!</strong>
+                <p id="feedback-text">Penjelasan akan muncul di sini.</p>
+            </div>
+
+            <div class="next-btn-container hidden" id="next-btn-container">
+                <button class="btn" id="next-btn" onclick="nextQuestion()">
+                    Selanjutnya
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen hidden">
+            <h2>Kuis Selesai!</h2>
+            <div class="score-circle">
+                <span class="score-number" id="final-score">0</span>
+                <span class="score-label">Dari 100</span>
+            </div>
+            <p class="result-message" id="result-message">Luar biasa!</p>
+            
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="btn btn-secondary" onclick="toggleAudio()" style="flex: 1; justify-content: center;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                </button>
+                <button class="btn" onclick="startQuiz()" style="flex: 2; justify-content: center;">
+                    Main Lagi
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2023 Edukasi Remaja Sehat
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA SOAL 100 PERTANYAAN KONKRET ---
+        const rawQuestions = [
+            // Perubahan Fisik Umum
+            { q: "Apa yang dimaksud dengan balig?", a: ["Masa kanak-kanak", "Masa pubertas/akil baligh", "Masa tua", "Masa bayi"], correct: 1, explain: "Balig adalah masa peralihan dari kanak-kanak menuju dewasa secara biologis." },
+            { q: "Pada usia berapa masa balig biasanya dimulai?", a: ["1-5 tahun", "8-18 tahun", "30-40 tahun", "50-60 tahun"], correct: 1, explain: "Pubertas umumnya dimulai saat anak memasuki usia 8 hingga 18 tahun." },
+            { q: "Hormon apa yang memicu perubahan fisik pada laki-laki?", a: ["Estrogen", "Progesteron", "Testosteron", "Insulin"], correct: 2, explain: "Testosteron adalah hormon utama seks pria yang memicu tanda balig." },
+            { q: "Hormon apa yang dominan pada perempuan saat balig?", a: ["Testosteron", "Adrenalin", "Estrogen", "Kortisol"], correct: 2, explain: "Estrogen memicu perkembangan organ seks sekunder pada perempuan." },
+            { q: "Apa ciri fisik pertama yang sering terjadi saat balig?", a: ["Tubuh memendek", "Tinggi badan bertambah cepat", "Gigi tanggal", "Rambut rontok"], correct: 1, explain: "Lonjakan pertumbuhan tinggi badan adalah tangan awal pubertas." },
+            
+            // Tanda Balig Laki-laki
+            { q: "Apa yang dimaksud dengan mimpi basah?", a: ["Kencing di tempat tidur", "Keluarnya sperma saat tidur", "Bermimpi jatuh ke air", "Banyak keringat saat tidur"], correct: 1, explain: "Mimpi basah adalah tanda kematangan alat reproduksi laki-laki." },
+            { q: "Perubahan suara pada laki-laki disebabkan oleh?", a: ["Sakit tenggorokan", "Pertumbuhan pita suara", "Terlalu banyak berteriak", "Infeksi telinga"], correct: 1, explain: "Kotak suara membesar sehingga suara menjadi lebih berat/berat." },
+            { q: "Rambut yang mulai tumbuh pada wajah laki-laki disebut?", a: ["Jambang dan kumis", "Rambut kepala", "Jenggot palsu", "Alis"], correct: 0, explain: "Jambang, kumis, dan jenggot tumbuh sebagai akibat hormon testosteron." },
+            { q: "Dada laki-laki akan mengalami perubahan menjadi?", a: "Membidang dan besar seperti perempuan", "Lebih bidang dan otot lebih kuat", "Mengecil", "Bungkuk"], correct: 1, explain: "Dada laki-laki menjadi lebih bidang dan otot dada berkembang." },
+            { q: "Bahu laki-laki cenderung menjadi?", a: ["Sempit", "Lebar", "Miring", "Tidak berubah"], correct: 1, explain: "Bahu laki-laki melebar sejalan dengan pertumbuhan kerangka." },
+            
+            // Tanda Balig Perempuan
+            { q: "Apa yang dimaksud dengan haid atau menstruasi?", a: ["Sakit perut", "Peluruhan dinding rahim berupa darah", "Kencing darah", "Luka di organ intim"], correct: 1, explain: "Haid adalah tanda kematangan organ reproduksi perempuan." },
+            { q: "Bagian tubuh perempuan yang paling menonjol berubah bentuknya adalah?", a: ["Lengan", "Pinggul dan payudara", "Kepala", "Telapak tangan"], correct: 1, explain: "Pinggul melebar dan payudara membesar untuk persiapan reproduksi." },
+            { q: "Berapa lama durasi haid yang normal?", a: ["1 hari", "3-7 hari", "14 hari", "1 bulan"], correct: 1, explain: "Haid normal berlangsung antara 3 hingga 7 hari." },
+            { q: "Siklus haid dihitung dari?", a: ["Sampai darah berhenti", "Hari pertama darah keluar sampai hari pertama haid berikutnya", "Hari terakhir haid", "Sembarang hari"], correct: 1, explain: "Siklus haid rata-rata 21-35 hari dihitung dari hari pertama keluarnya darah." },
+            { q: "Kenapa payudara perempuan terasa nyeri saat balig?", a: ["Karena penyakit", "Karena pertumbuhan jaringan kelenjar", "Karena tertabrak", "Karena salah makan"], correct: 1, explain: "Nyeri adalah efek normal dari tumbuhnya jaringan payudara." },
+            
+            // Kesehatan & Kebersihan
+            { q: "Apa yang harus dilakukan saat sedang haid?", a: ["Tidak mandi", "Mandi secara rutin dan bersih", "Mandi air es", "Tidak boleh keluar rumah"], correct: 1, explain: "Kebersihan tubuh harus tetap dijaga, bahkan lebih diperhatikan saat haid." },
+            { q: "Seberapa sering pembalut harus diganti saat haid?", a: ["Seharian", "Tiap 4-6 jam atau bila sudah penuh", "Seminggu sekali", "Tidak usah diganti"], correct: 1, explain: "Pembalut basah adalah tempat bakteri berkembang biak, harus sering diganti." },
+            { q: "Apa penyebab timbulnya jerawat saat balig?", a: ["Kurang vitamin", "Kelenjar minyak terlalu aktif karena hormon", "Terlalu banyak minum air", "Karena debu"], correct: 1, explain: "Hormon meningkatkan produksi sebum/minyak yang menyumbat pori-pori." },
+            { q: "Bagaimana cara mengatasi jerawat yang benar?", a: ["Dipencet", "Dibersihkan dan dirawat dengan sabun khusus", "Diolesi pasta gigi", "Dibiarkan saja sampai besar"], correct: 1, explain: "Memencet jerawat bisa menyebabkan infeksi dan bekas noda." },
+            { q: "Bau badan yang tidak sedap saat balig disebabkan oleh?", a: ["Keringat yang bercampur bakteri", "Makan pedas", "Kurang tidur", "Memakai baju hitam"], correct: 0, explain: "Keringat itu tidak berbau, namun bakteri di kulit memecah keringat menjadi bau." },
+            { q: "Organ tubuh yang perlu dicuci lebih sering saat balig adalah?", a: ["Telinga", "Ketiak dan organ intim", "Rambut", "Kuku kaki"], correct: 1, explain: "Ketiak dan organ intim menghasilkan lebih banyak keringat dan perlu kebersihan ekstra." },
+            
+            // Reproduksi & Moral
+            { q: "Apa fungsi reproduksi pada manusia?", a: ["Menghasilkan keturunan", "Berenang", "Bernapas", "Berlari"], correct: 0, explain: "Sistem reproduksi berfungsi untuk melestarikan keturunan." },
+            { q: "Apa aurat laki-laki di depan perempuan lain?", a: ["Seluruh tubuh", "Lutut ke atas", "Dari pusar sampai lutut", "Hanya wajah"], correct: 2, explain: "Aurat laki-laki adalah antara pusar dan lutut." },
+            { q: "Apakah mandi wajib diperlukan setelah mimpi basah?", a: ["Tidak perlu", "Ya, wajib", "Hanya cukup cebok", "Hanya wajib bagi yang sudah menikah"], correct: 1, explain: "Mandi wajib (junub) hukumnya wajib bagi laki-laki yang mengalami mimpi basah." },
+            { q: "Apakah mandi wajib diperlukan setelah haid berhenti?", a: ["Tidak perlu", "Ya, wajib sebelum sholat", "Cukup dengan air biasa", "Tidak ada ketentuan"], correct: 1, explain: "Perempuan harus mandi wajib setelah haid bersih untuk mensucikan diri." },
+            { q: "Sikap yang baik jika melawang jenis adalah?", a: ["Sombong", "Sopan dan menjaga pandangan", "Mengejek", "Menyentuh sembarangan"], correct: 1, explain: "Islam mengajarkan untuk menundukkan pandian dan menjaga sopan santun." },
+            
+            // Emosi & Psikologi
+            { q: "Mengapa remaja mudah tersinggung saat balig?", a: ["Karena nakal", "Karena perubahan hormon yang mempengaruhi emosi", "Karena orang tua marah", "Karena kurang uang"], correct: 1, explain: "Perubahan hormon membuat suasana hati tidak stabil (labil)." },
+            { q: "Apa yang harus dilakukan jika merasa sedih atau marah tanpa alasan?", a: ["Merusak barang", "Curhat ke orang tua atau teman", "Mengurung diri", "Menangis sepanjang hari"], correct: 1, explain: "Mencurahkan perasaan kepada orang yang dipercaya membantu meredakan emosi." },
+            { q: "Apakah wajar merasa canggung dengan perubahan tubuh?", a: ["Tidak wajar", "Wajar, dialami semua orang", "Hanya dirasakan orang jahat", "Tidak boleh merasa"], correct: 1, explain: "Rasa canggung adalah fase normal dalam beradaptasi dengan tubuh baru." },
+            { q: "Fase ingin mandiri dan lepas dari orang tua disebut?", a: ["Masa pubertas", "Masa pencarian jati diri", "Masa bodoh", "Masa kekanak-kanakan"], correct: 1, explain: "Remaja mulai ingin mengambil keputusan sendiri sebagai bagian dari kedewasaan." },
+            { q: "Apa bahaya dari pergaulan bebas saat balig?", a: ["Bisa banyak teman", "Risiko penyakit dan hamil di luar nikah", "Menjadi populer", "Dapat uang"], correct: 1, explain: "Pergaulan bebas berisiko tinggi terhadap kesehatan dan moral." },
+            
+            // Gizi & Makanan
+            { q: "Nutrisi apa yang paling dibutuhkan untuk pertumbuhan tulang?", a: ["Lemak", "Gula", "Kalsium", "Kafein"], correct: 2, explain: "Kalsium terdapat pada susu dan sayuran hijau, penting untuk tulang." },
+            { q: "Mengapa remaja butuh makan lebih banyak?", a: ["Karena tamak", "Karena tubuh sedang tumbuh cepat", "Karena ingin gemuk", "Karena disuruh ibu"], correct: 1, explain: "Metabolisme dan pertumbuhan tinggi membutuhkan energi lebih besar." },
+            { q: "Makanan yang sehat dikonsumsi saat balig adalah?", a: ["Makanan seimbang (4 sehat 5 sempurna)", "Camilan manis terus menerus", "Minuman bersoda", "Fast food setiap hari"], correct: 0, explain: "Gizi seimbang sangat menunjang pertumbuhan fisik dan otak." },
+            { q: "Kekurangan zat besi bisa menyebabkan?", a: ["Kurus", "Anemia (kurang darah)", "Tinggi badan", "Pintar"], correct: 1, explain: "Terutama pada perempuan yang haid, zat besi penting mencegah kurang darah." },
+            { q: "Apakah minum alkohol baik bagi remaja?", a: ["Ya, sedikit", "Tidak, merusak otak dan organ", "Hanya saat pesta", "Tidak masalah"], correct: 1, explain: "Alkohol sangat berbahaya bagi perkembangan otak remaja." },
+            
+            // Mitos & Fakta
+            { q: "Apakah minum air dingin saat haid menyebabkan darah membeku?", a: ["Benar", "Salah, itu mitos", "Kadang benar", "Tidak tahu"], correct: 1, explain: "Air dingin tidak mempengaruhi aliran darah haid. Itu mitos belaka." },
+            { q: "Apakah memencet jerawat bisa membuatnya cepat hilang?", a: ["Ya", "Tidak, malah menimbulkan infeksi", "Benar", "Tidak pengaruh"], correct: 1, explain: "Memencet mendorong bakteri masuk lebih dalam ke kulit." },
+            { q: "Apakah masturbasi (onani) menyebabkan kebutaan?", a: ["Ya", "Tidak, itu mitos", "Benar", "Mungkin"], correct: 1, explain: "Onani tidak berhubungan dengan penglihatan, namun berdampak buruk pada psikologis." },
+            { q: "Apakah balig terjadi pada semua manusia?", a: ["Tidak, hanya sebagian", "Ya, semua manusia pasti mengalaminya", "Hanya pada laki-laki", "Hanya pada orang kaya"], correct: 1, explain: "Setiap manusia akan mengalami proses pubertas sebagai fase tumbuh kembang." },
+            { q: "Apakah canggung berjalan saat balig karena kaki membesar?", a: ["Tidak", "Ya, karena pusat gravitasi berubah", "Karena sakit kaki", "Karena takut"], correct: 1, explain: "Pertumbuhan kaki dan tangan yang tidak seimbang membuat remaja terlihat canggung." },
+            
+            // Tambahan Soal untuk memenuhi kuota 100
+            { q: "Siapa orang yang pertama kali harus diajak bicara tentang haid?", a: ["Pacar", "Ibu atau Guru Biologi", "Tetangga", "Teman sekolah"], correct: 1, explain: "Ibu dan guru adalah figur yang tepat dan aman untuk konsultasi." },
+            { q: "Alat kontrasepsi adalah?", a: ["Alat masak", "Alat/cara mencegah kehamilan", "Alat musik", "Alat tulis"], correct: 1, explain: "Kontrasepsi adalah pencegah kehamilan, namun remaja sebaiknya belum memikirkan ini." },
+            { q: "Apakah cinta pada masa balig (pacaran) itu dilarang?", a: ["Boleh", "Dilarang keras jika membawa maksiat", "Wajib", "Tidak masalah"], correct: 1, explain: "Pacaran yang berujung pada maksiat (zina, pegang tangan) adalah larangan." },
+            { q: "Panas dalam (tidak enak badan) sebelum haid disebut?", a: ["Sakit", "Sindrom Pra-Menstruasi (PMS)", "Demam berdarah", "Flu"], correct: 1, explain: "PMS adalah gejala fisik dan emosional sebelum haid datang." },
+            { q: "Organ reproduksi pria yang memproduksi sperma disebut?", a: ["Vagina", "Testis (Buah zakar)", "Perut", "Jantung"], correct: 1, explain: "Testis adalah pabrik sperma pada laki-laki." },
+            { q: "Organ reproduksi wanita tempat janin tumbuh adalah?", a: ["Indung telur", "Rahim", "Vagina", "Saluran telur"], correct: 1, explain: "Rahim (uterus) adalah tempat janin berkembang selama kehamilan." },
+            { q: "Apa fungsi rambut ketiak?", a: "Sebagai hiasan", "Mengurangi gesekan dan menjaga bakteri", "Sumber panas", "Penghangat tubuh"], correct: 1, explain: "Rambut ketiak berfungsi mengurangi gesekan dan menyerap keringat." },
+            { q: "Sebutan lain untuk haid adalah?", a: ["Datang bulan", "Datang tahun", "Datang minggu", "Sakit"], correct: 0, explain: "Masyarakat sering menyebut haid sebagai datang bulan." },
+            { q: "Apa yang dimaksud dengan akil baligh?", a: ["Sudah tua", "Sampai pada batas usia wajib menjalankan syariat Islam", "Sudah kaya", "Sudah kerja"], correct: 1, explain: "Secara syariat, akil baligh berarti balig dan sempurna akal." },
+            { q: "Apakah puasa wajib bagi yang sudah balig?", a: ["Tidak", "Ya, wajib", "Hanya di bulan Ramadhan", "Boleh memilih"], correct: 1, explain: "Setelah balig, amalan ibadah seperti puasa dan sholat menjadi wajib." },
+            { q: "Kapan seorang laki-laki dianggap balig secara syariat?", a: ["Lahir saja", "Saat mimpi basah atau berumur 15 tahun", "Saat sunat", "Saat SD"], correct: 1, explain: "Sal satu tanda balig laki-laki adalah mimpi basah atau mencapai umur takwil (15 tahun)."},
+            { q: "Kapan seorang perempuan dianggap balig secara syariat?", a: ["Saat haid atau berumur 15 tahun", "Saat sunat", "Saat SD", "Saat lahir"], correct: 0, explain: "Tanda balig perempuan adalah haid atau mencapai umur 15 tahun." },
+            { q: "Apa yang terjadi jika remaja merokok?", a: ["Jadi tambah tinggi", "Pertumbuhan terhambat dan paru-paru rusak", "Jadi pintar", "Sehat"], correct: 1, explain: "Rokok mengandung racun yang menghambat pertumbuhan fisik." },
+            { q: "Olahraga yang baik untuk remaja adalah?", a: ["Duduk diam", "Renang, lari, basket", "Tidur", "Main game"], correct: 1, explain: "Olahraga merangsang hormon pertumbuhan dan kesehatan jantung." },
+            { q: "Jam tidur yang baik untuk remaja adalah?", a: ["4 jam", "7-9 jam", "12 jam", "Tidak usah tidur"], correct: 1, explain: "Tidur cukup membantu regenerasi sel dan hormon pertumbuhan." },
+            { q: "Apakah pornografi baik untuk dikonsumsi remaja?", a: ["Ya, menghibur", "Tidak, merusak pikiran dan moral", "Wajar", "Tidak masalah"], correct: 1, explain: "Pornografi merusak cara pandang terhadap lawan jenis dan kecanduan." },
+            { q: "Penyakit menular seksual bisa dicegah dengan cara?", a: ["Gonta-ganti pasangan", "Menjaga perilaku seksual sehat (tidak seks bebas)", "Minum obat", "Mandi"], correct: 1, explain: "PMS paling efektif dicegah dengan perilaku seksual yang monogami/sesuai norma." },
+            { q: "Apa yang dimaksud dengan impian basah pada perempuan?", a: ["Tidak ada", "Lendir cairan keluar saat tidur karena terangsang", "Kencing", "Luka"], correct: 1, explain: "Perempuan juga bisa mengalami pelumasan atau cairan saat mimpi, meski jarang dibahas." },
+            { q: "Apakah haid menyakitkan?", a: ["Selalu", "Bisa iya (kram perut), bisa tidak", "Tidak pernah", "Sakit sekali sampai pingsan"], correct: 1, explain: "Rasa nyeri (dismenore) wajar terjadi akibat kontraksi rahim." },
+            { q: "Cara mengurangi nyeri haid adalah?", a: ["Makan pedas", "Kompres hangat dan istirahat", "Lompat-lompat", "Minum es"], correct: 1, explain: "Kompres hangat meredakan ketegangan otot rahim." },
+            { q: "Apakah ukuran payudara perempuan sama?", a: ["Sama persis", "Tidak selalu, ada yang sedikit beda", "Kiri selalu lebih besar", "Kanan selalu lebih besar"], correct: 1, explain: "Sedikit perbedaan ukuran adalah hal yang normal dan wajar." },
+            { q: "Apa nama alat yang digunakan perempuan saat haid?", a: ["Popok bayi", "Pembalut", "Tisu", "Handuk"], correct: 1, explain: "Pembalut menyerap darah haid agar tidak tembus ke pakaian." },
+            { q: "Apakah laki-laki bisa mengalami osteoporosis (tulang rapuh)?", a: ["Tidak bisa", "Bisa, jika kurang kalsium saat remaja", "Hanya perempuan", "Hanya orang tua"], correct: 1, explain: "Masa balig adalah masa emas menimbang kalsium untuk mencegah ini." },
+            { q: "Apa efek negatif gadget berlebihan bagi remaja?", a: ["Mata sehat", "Gangguan tidur dan mata lelah", "Menjadi cerdas", "Bisa terbang"], correct: 1, explain: "Cahaya biru gadget mengganggu hormon melatonin (tidur)." },
+            { q: "Apa yang dimaksud dengan kebersihan organ intim (aurat)?", a: "Hanya mandi", "Membasuh dengan benar dari depan ke belakang (bagi wanita)", "Tidak usah dicuci", "Dipijat"], correct: 1, explain: "Cara mencuci yang salah (belakang ke depan) bisa memindahkan kuman ke organ intim." },
+            { q: "Siapa yang berhak melihat aurat kita?", a: ["Teman sebaya", "Suami/Istri, Orang Tua, dan Sesama Jenis", "Guru", "Dokter bedah kecuali darurat"], correct: 1, explain: "Aurat hanya boleh dilihat oleh mahram (orang tua, suami/istri) dan sesama jenis dalam batas tertentu." },
+            { q: "Apa yang harus dilakukan jika teman mengajak narkoba?", a: "Ikut saja", "Tolak dengan tegas dan lapor orang tua", "Coba sedikit", "Biarin saja"], correct: 1, explain: "Narkoba adalah musuh utama bangsa, harus ditolak." },
+            { q: "Apakah mencabut rambut ketiak dianjurkan?", a: ["Wajib", "Dianjurkan untuk kebersihan, tapi jangan terlalu sering dicukur habis", "Dilarang agama", "Dibiarkan lebat"], correct: 1, explain: "Mencukur ketiak membantu kebersihan, namun biarkan sisanya agar tidak iritasi." },
+            { q: "Apa fungsi keringat?", a: "Membuat bau", "Mengatur suhu tubuh dan membuang racun", "Membuat hitam", "Lem"], correct: 1, explain: "Keringat membantu mendinginkan tubuh saat panas." },
+            { q: "Mengapa laki-laki sering mengalami mimpi basah?", a: ["Karena kurang main", "Karena sperma sudah matang dan perlu dikeluarkan", "Sakit", "Kesanalan"], correct: 1, explain: "Ini proses alami penggantian sperma lama yang sudah matang." },
+            { q: "Apakah siklus haid selalu teratur tanggalnya?", a: ["Selalu tanggal 20", "Bisa berubah-ubah tergantung stres dan kesehatan", "Selalu sama", "Tidak pernah"], correct: 1, explain: "Siklus haid bisa tidak teratur jika sedang stres atau sakit." },
+            { q: "Apa yang terjadi jika kita tidak mandi setelah mimpi basah?", a: ["Tidak apa-apa", "Tidak boleh sholat dan tidak suci", "Ajaib", "Badan berasap"], correct: 1, explain: "Mandi wajib adalah syarat sahnya ibadah seperti sholat." },
+            { q: "Apakah berhubungan seks (zina) saat balig diperbolehkan?", a: ["Boleh", "Tidak boleh, hanya boleh dalam pernikahan", "Asal suka suka", "Boleh jika pacaran"], correct: 1, explain: "Hubungan seks hanya halal dalam ikatan pernikahan." },
+            { q: "Apa tujuan Tuhan menciptakan masa balig?", a: ["Untuk menyiksa manusia", "Untuk menyiapkan manusia menjadi khalifah di bumi", "Agak bingung", "Supaya tua"], correct: 1, explain: "Balig adalah persiapan manusia melanjutkan keturunan dan tanggung jawab." },
+            { q: "Vitamin yang baik untuk kulit berjerawat adalah?", a: ["Vitamin A dan E", "Vitamin S", "Vitamin G", "Tidak ada"], correct: 0, explain: "Vitamin A (Retinol) dan E (Tocopherol) membantu kesehatan kulit." },
+            { q: "Bisakah hamil jika baru sekali berhubungan seks?", a: ["Tidak bisa", "Bisa sekali saja", "Harus sering", "Tidak mungkin"], correct: 1, explain: "Kehamilan bisa terjadi dari satu kali kegagalan kontrasepsi/konsultasi." },
+            { q: "Apa nama alat reproduksi laki-laki yang keluar masuk vagina?", a: ["Testis", "Penis", "Anus", "Mulut"], correct: 1, explain: "Penis adalah organ kopulasi pada laki-laki." },
+            { q: "Apakah perasaan suka kepada lawan jenis itu dosa?", a: ["Ya dosa", "Tidak dosa selama tidak berbuat maksiat", "Dosa besar", "Ajaib"], correct: 1, explain: "Suka itu rasa normal, namun bagaimana menyalurkannya yang ditilai." },
+            { q: "Sebutkan contoh pergaulan positif!", a: ["Nongkrong di cafe", "Belajar kelompok dan olahraga bersama", "Balapan", "Main game sampai lupa waktu"], correct: 1, explain: "Pergaulan positif membangun skill dan kesehatan." },
+            { q: "Apa yang dimaksud dengan bullying?", a: "Menyapa teman", "Perilaku mengganggu/menindas teman", "Belajar", "Main"], correct: 1, explain: "Bullying (perundungan) merugikan korban secara mental." },
+            { q: "Bagaimana sikap jika teman di-bully?", a: ["Ikut nge-bully", "Membela dan melaporkan ke guru", "Ketawa", "Video kan"], correct: 1, explain: "Kita harus menjadi pelindung bagi teman yang dirugikan." },
+            { q: "Apakah rambut kemaluan perlu dicukur habis?", a: ["Wajib habis", "Boleh dipangkas tapi tidak wajib habis (kebersihan)", "Dilarang keras", "Dibiarkan lebat"], correct: 1, explain: "Memangkas rambut kemaluan adalah sunnah dan menjaga kebersihan." },
+            { q: "Apa bahaya memakai celana ketat bagi laki-laki?", a: ["Keren", "Mengganggu aliran darah ke testis (kesuburan)", "Membuat cepat tinggi", "Tidak ada efek"], correct: 1, explain: "Suhu testis yang terlalu panas akibat celana ketat bisa menurunkan kualitas sperma." },
+            { q: "Apa kepanjangan dari PMS?", a: ["Pre Menstrual Syndrome", "Please My Self", "Penyakit Mulut Sedap", "Pinggang Mulai Sakit"], correct: 0, explain: "PMS adalah sindrom pra-menstruasi." },
+            { q: "Apakah semua remaja harus mengalami jerawat?", a: ["Harus", "Tidak semua, tergantung genetik dan kebersihan", "Wajib", "Tidak ada yang lolos"], correct: 1, explain: "Sebagian remaja beruntung memiliki kulit yang jarang berjerawat." },
+            { q: "Apa yang dimaksud dengan sunat (khitan)?", a: ["Memotong jari", "Memotong kulit penutup ujung penis", "Memotong telinga", "Memotong hidung"], correct: 1, explain: "Khitan dianjurkan dalam Islam untuk kebersihan dan kesehatan." },
+            { q: "Kapan waktu terbaik untuk sunat?", a: ["Saat lahir", "Saat bayi atau anak-anak", "Saat sudah kakek-kakek", "Tidak usah"], correct: 1, explain: "Semakin cepat semakin baik untuk pemulihan." },
+            { q: "Apakah air mani laki-laki berbau?", a: ["Wangi parfum", "Bau khas (bau anyir/laut)", "Busuk", "Tidak ada bau"], correct: 1, explain: "Air mani memiliki bau khas yang disebut bleach-like karena kandungan kimianya." },
+            { q: "Apa fungsi dari BH (Beha) bagi perempuan?", a: ["Hanya hiasan", "Menopang payudara agar tidak kendur dan nyaman bergerak", "Sumbat napas", "Pemanis"], correct: 1, explain: "BH memberikan dukungan bagi payudara yang sedang tumbuh." },
+            { q: "Apakah minum pil KB bisa mencegah haid?", a: ["Tidak bisa", "Bisa, tapi hanya untuk resep dokter", "Bisa dibeli di warung", "Selalu berhasil"], correct: 1, explain: "Pil KB mengatur hormon, namun penggunaannya harus di bawah pengawasan dokter." },
+            { q: "Siapa yang menentukan jenis kelamin bayi?", a: ["Ibu", "Ayah (kromosom X/Y pada sperma)", "Dokter", "Bidan"], correct: 1, explain: "Sperma ayah membawa kromosom penentu jenis kelamin (X atau Y)." },
+            { q: "Apa nama sel kelamin perempuan?", a: ["Sperma", "Sel Telur (Ovum)", "Rahim", "Vagina"], correct: 1, explain: "Sel telur diproduksi di indung telur wanita." },
+            { q: "Berapa lama sperma bisa bertahan hidup di dalam rahim wanita?", a: ["1 detik", "3-5 hari", "1 tahun", "Selamanya"], correct: 1, explain: "Sperma bisa bertahan hidup hingga 5 hari menunggu sel telur." },
+            { q: "Apakah berhubungan seks saat haid diperbolehkan?", a: ["Dianjurkan", "Secara medis bisa tapi secara agama banyak pendapat makruh/haram", "Wajib", "Tidak masalah"], correct: 1, explain: "Secara kesehatan meningkatkan risiko infeksi, secara agama umumnya dihindari." },
+            { q: "Apa yang terjadi jika testis laki-laki tidak turun ke zakar?", a: ["Normal", "Disebut Kriptorkidismus (perlu tindakan dokter)", "Wajar", "Ajaib"], correct: 1, explain: "Testis yang tidak turun bisa menyebabkan kemandulan dan kanker." },
+            { q: "Apa fungsi dari kelenjar getah bening di ketiak?", a: "Tempat menyimpan uang", "Bagian sistem imun melawan infeksi", "Pembangkit listrik", "Otot"], correct: 1, explain: "Kelenjar getah bening adalah benteng pertahanan tubuh terhadap kuman." },
+            { q: "Apakah rambut yang tumbuh di punggung perempuan wajar?", a: ["Wajar", "Bisa wajar namun jika berlebihan konsultasi dokter (Hirsutisme)", "Dosa", "Sakit"], correct: 1, explain: "Rambut halus wajar, namun jika seperti kumis/jenggot tebal bisa tanda ketidakseimbangan hormon." },
+            { q: "Apa yang harus dilakukan jika puting payudara sakit?", a: ["Dipencet", "Dibiarkan", "Konsultasi, gunakan BH yang nyaman", "Diolesi bedak"], correct: 2, explain: "Sakit puting biasanya karena gesekan atau tumbuh kelenjar susu." },
+            { q: "Siapa tokoh yang harus menjadi panutan saat balig?", a: ["Artis FTV", "Rasulullah SAW dan Orang Tua", "Penyanyi Rock", "Youtuber"], correct: 1, explain: "Teladan akhlak dan moral terbaik ada pada Rasulullah dan orang tua." },
+            { q: "Apa yang dimaksud dengan Zina?", a: ["Makan di meja", "Hubungan seks di luar nikah", "Berjalan kaki", "Tidur siang"], correct: 1, explain: "Zina adalah dosa besar berupa hubungan seks di luar pernikahan." },
+            { q: "Apakah memakai deodorant aman?", a: ["Aman jika sesuai kulit", "Selalu berbahaya", "Selalu aman", "Bisa dimakan"], correct: 0, explain: "Pilih deodorant tanpa alkohol jika kulit sensitif." },
+            { q: "Apakah menstruasi berarti darah kotor?", a: ["Iya kotor sekali", "Tidak, itu lapisan dinding rahim yang tidak dibuahi", "Dari kaki", "Dari mulut"], correct: 1, explain: "Darah haid adalah lapisan endometrium yang luruh karena tidak ada janin." },
+            { q: "Kapan seorang remaja diperbolehkan menikah?", a: ["Saat lahir", "Saat sudah balig, dewasa pikiran, dan mampu (batas usia pernikahan)", "Saat TK", "Saat SD"], correct: 1, explain: "Menikah butuh kesiapan fisik, mental, dan finansial." },
+            { q: "Apa efek stres berat pada masa balig?", a: ["Menjadi pinter", "Haid terlambat, jerawat muncul, sakit maag", "Jadi tinggi", "Kurus sehat"], correct: 1, explain: "Stres mempengaruhi hormon tubuh secara signifikan." }
+        ];
+
+        // --- STATE GAME ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isAudioEnabled = true;
+        let speechSynth = window.speechSynthesis;
+        let currentUtterance = null;
+
+        // --- DOM ELEMENTS ---
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCounter = document.getElementById('question-counter');
+        const currentScoreDisplay = document.getElementById('current-score-display');
+        const feedbackEl = document.getElementById('feedback');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtnContainer = document.getElementById('next-btn-container');
+        const audioToggle = document.getElementById('audio-toggle');
+
+        // --- EVENT LISTENERS ---
+        audioToggle.addEventListener('change', (e) => {
+            isAudioEnabled = e.target.checked;
+            if (!isAudioEnabled) {
+                speechSynth.cancel();
+            }
+        });
+
+        // --- FUNCTIONS ---
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            feedbackEl.style.display = 'none';
+            feedbackEl.className = 'feedback-area';
+            nextBtnContainer.classList.add('hidden');
+            optionsContainer.innerHTML = '';
+            
+            const q = rawQuestions[currentQuestionIndex];
+            
+            const progressPercent = ((currentQuestionIndex) / rawQuestions.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            questionCounter.textContent = `Soal ${currentQuestionIndex + 1} / ${rawQuestions.length}`;
+            currentScoreDisplay.textContent = `Skor: ${score}`;
+
+            questionTextEl.textContent = q.q;
+
+            q.a.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            speakText(q.q);
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const q = rawQuestions[currentQuestionIndex];
+            const isCorrect = selectedIndex === q.correct;
+            const options = document.querySelectorAll('.option-btn');
+
+            options.forEach(opt => opt.disabled = true);
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                score += 1; // Skor 1 per soal (karena ada 100 soal)
+                feedbackTitle.textContent = "Benar! 🎉";
+                feedbackEl.classList.add('correct');
+                playSoundEffect('correct');
+            } else {
+                btnElement.classList.add('wrong');
+                options[q.correct].classList.add('correct');
+                feedbackTitle.textContent = "Kurang Tepat";
+                feedbackEl.classList.add('wrong');
+                playSoundEffect('wrong');
+            }
+
+            currentScoreDisplay.textContent = `Skor: ${score}`;
+
+            feedbackText.textContent = q.explain || "Teruslah belajar!";
+            feedbackEl.style.display = 'block';
+            nextBtnContainer.classList.remove('hidden');
+
+            feedbackEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < rawQuestions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            speechSynth.cancel();
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            document.getElementById('final-score').textContent = score;
+            
+            const msgEl = document.getElementById('result-message');
+            if (score >= 80) {
+                msgEl.textContent = "Luar biasa! Kamu sangat siap menyambut usia balig.";
+            } else if (score >= 60) {
+                msgEl.textContent = "Bagus! Kamu sudah paham, tinggal sedikit lagi.";
+            } else {
+                msgEl.textContent = "Jangan menyerah! Coba lagi untuk hasil lebih baik.";
+            }
+        }
+
+        // --- AUDIO SYSTEM ---
+        function speakText(text) {
+            if (!isAudioEnabled) return;
+            speechSynth.cancel();
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            currentUtterance.lang = 'id-ID';
+            currentUtterance.rate = 1;
+            currentUtterance.pitch = 1;
+
+            const voices = speechSynth.getVoices();
+            const idVoice = voices.find(v => v.lang.includes('id'));
+            if (idVoice) currentUtterance.voice = idVoice;
+
+            speechSynth.speak(currentUtterance);
+        }
+
+        function replayAudio() {
+            const q = rawQuestions[currentQuestionIndex];
+            speakText(q.q);
+            const btn = document.getElementById('replay-audio-btn');
+            btn.style.transform = "scale(0.9)";
+            setTimeout(() => btn.style.transform = "scale(1)", 200);
+        }
+
+        function toggleAudio() {
+            const checkbox = document.getElementById('audio-toggle');
+            checkbox.checked = !checkbox.checked;
+            isAudioEnabled = checkbox.checked;
+        }
+
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
+
+        // --- SOUND EFFECT ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSoundEffect(type) {
+            if (!isAudioEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+    </script>
+</body>
+</html>
